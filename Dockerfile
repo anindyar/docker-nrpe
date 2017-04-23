@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 RUN apt-get update --fix-missing \
-    && apt-get install -q -y nagios-nrpe-server nagios-plugins curl \
+    && apt-get install -q -y nagios-nrpe-server nagios-plugins bc curl \
     && apt-get clean \
     && rm -rf /var/lib/apt /tmp/* /var/tmp/*
 
@@ -9,7 +9,7 @@ ENV NAGIOS_CONF_DIR /etc/nagios
 ENV NAGIOS_PLUGINS_DIR /usr/lib/nagios/plugins
 
 RUN sed -e 's/^allowed_hosts=/#allowed_hosts=/' -i $NAGIOS_CONF_DIR/nrpe.cfg \
-    && echo "command[check_load]=$NAGIOS_PLUGINS_DIR/check_load -w 15,10,5 -c 30,25,20" > $NAGIOS_CONF_DIR/nrpe.d/load.cfg \
+    && echo "command[check_load]=/usr/lib/nagios/plugins/check_load -w 1,1,1 -c 2,2,2" > $NAGIOS_CONF_DIR/nrpe.d/load.cfg \
     && echo "command[check_mem]=$NAGIOS_PLUGINS_DIR/check_mem -f -C -w 12 -c 10 " > $NAGIOS_CONF_DIR/nrpe.d/mem.cfg \
     && echo "command[check_total_procs]=/usr/lib/nagios/plugins/check_procs -w 500 -c 700 " > $NAGIOS_CONF_DIR/nrpe.d/procs.cfg
 
