@@ -1,0 +1,12 @@
+#!/bin/bash
+output="Error Found in postgreSQL at `date`"
+if tail -n +`cat /var/logchecker.tmp` /var/log/postgresql/postgresql-9.4-main.log | grep -q "ERROR:"; then
+        echo "CRITICAL- $output are there"
+        wc -l /var/log/postgresql/postgresql-9.4-main.log | awk  '{print $1}' > /var/logchecker.tmp
+        exit 2
+else
+        echo "OK- $output are none"
+        wc -l /var/log/postgresql/postgresql-9.4-main.log | awk  '{print $1}' > /var/logchecker.tmp
+        exit 0
+fi
+

@@ -25,6 +25,9 @@ if [ ! -z "$CHECKDISKS" ]; then
 fi
 #This sets the check_load to adapt the threshold to the number of Cores
 echo "command[check_load]=/usr/lib/nagios/plugins/check_load -w `echo \`nproc\`*1 | bc`,`echo \`nproc\`*0.8 | bc`,`echo \`nproc\`*0.8 | bc` -c `echo \`nproc\`*1.5 | bc`,`echo \`nproc\`*1 | bc`,`echo \`nproc\`*1 | bc`" | tee $NAGIOS_CONF_DIR/nrpe.d/load.cfg > /dev/null
+#Add Unicorn plugin
+echo "command[check_unicorn]=/usr/lib/nagios/plugins/check_unicorn.sh" tee $NAGIOS_CONF_DIR/nrpe.d/unicron.cfg > /dev/null
+
 # Start NREP Server
 $NRPE_EXEC -c $NAGIOS_CONF_DIR/nrpe.cfg -d
 
